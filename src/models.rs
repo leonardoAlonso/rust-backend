@@ -7,6 +7,13 @@ pub struct Post{
     pub body: String,
 }
 
+#[derive(Queryable, Debug)]
+
+pub struct PostSimplicado{
+    pub title:String,
+    pub body: String,
+}
+
 use super::schema::posts;
 
 #[derive(Insertable)]

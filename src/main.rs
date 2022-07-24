@@ -30,25 +30,17 @@ fn main() {
     // };
     // let post: Post = diesel::insert_into(posts::table).values(&new_post).get_result(&con).expect("Error insierting data");
 
-    //Select * from post
-    println!("Query sin limites");
-    let post_result = posts.load::<Post>(&con).expect("Error on query excecution");
-    
-    for post in post_result {
-        println!("{:?}", post);
-    }
+    diesel::update(posts.filter(id.eq(3)))
+        .set((slug.eq("tercer-post"), body.eq("tercer post"), title.eq("mi tercer post")))
+        .get_result::<Post>(&con)
+        .expect("Error updating record");
 
+    // Where
     println!("Query con limites");
-    let post_result = posts.order(id.desc()).limit(1).load::<Post>(&con).expect("Error on query excecution");
+    let post_result = posts.load::<Post>(&con).expect("Error on query excecution");
 
     for post in post_result {
         println!("{:?}", post);
     }
-
-    // // Query con columnas especificas
-    // let post_result = posts.select((title, body)).load::<PostSimplicado>(&con).expect("Error on query excecution");
-    // for post in post_result {
-    //     println!("{:?}", post);
-    // }
 
 }

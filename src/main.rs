@@ -30,10 +30,12 @@ fn main() {
     // };
     // let post: Post = diesel::insert_into(posts::table).values(&new_post).get_result(&con).expect("Error insierting data");
 
-    diesel::update(posts.filter(id.eq(3)))
-        .set((slug.eq("tercer-post"), body.eq("tercer post"), title.eq("mi tercer post")))
-        .get_result::<Post>(&con)
-        .expect("Error updating record");
+    // diesel::update(posts.filter(id.eq(3)))
+    //     .set((slug.eq("tercer-post"), body.eq("tercer post"), title.eq("mi tercer post")))
+    //     .get_result::<Post>(&con)
+    //     .expect("Error updating record");
+
+    diesel::delete(posts.filter(id.eq(7))).get_result::<Post>(&con).expect("Error on deletion");
 
     // Where
     println!("Query con limites");

@@ -1,48 +1,14 @@
-#[macro_use]
-extern crate diesel;
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
-pub mod schema;
-pub mod models;
+#[get("/")]
+async fn hello_world() -> impl Responder {
+    HttpResponse::Ok().body("hello world")
+}
 
-use dotenv::dotenv;
-use std::env;
-
-use diesel::prelude::*;
-use diesel::pg::PgConnection;
-
-fn main() {
-    
-    dotenv().ok();
-
-    let db_url = env::var("DATABASE_URL").expect("db url undefined");
-
-
-    let con = PgConnection::establish(&db_url).expect("connection refused");
-    
-    use self::models::{Post, NewPost, PostSimplicado};
-    use self::schema::posts;
-    use self::schema::posts::dsl::*;
-
-    // let new_post = NewPost {
-    //     title: "Mi segundo post",
-    //     body: "lorem ipsum",
-    //     slug: "segundo-post"
-    // };
-    // let post: Post = diesel::insert_into(posts::table).values(&new_post).get_result(&con).expect("Error insierting data");
-
-    // diesel::update(posts.filter(id.eq(3)))
-    //     .set((slug.eq("tercer-post"), body.eq("tercer post"), title.eq("mi tercer post")))
-    //     .get_result::<Post>(&con)
-    //     .expect("Error updating record");
-
-    diesel::delete(posts.filter(id.eq(7))).get_result::<Post>(&con).expect("Error on deletion");
-
-    // Where
-    println!("Query con limites");
-    let post_result = posts.load::<Post>(&con).expect("Error on query excecution");
-
-    for post in post_result {
-        println!("{:?}", post);
-    }
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new().service(hello_world)
+    }).bind(("0.0.0.0", 9900))?.run().await
 
 }
